@@ -1,5 +1,5 @@
 import os
-from typing import Annotated, TypedDict, List
+from typing import Annotated, TypedDict, List, Optional
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage
 from langgraph.graph import StateGraph, END
@@ -13,7 +13,7 @@ load_dotenv()
 # Configure Groq LLM
 groq_api_key = os.getenv("GROQ_API_KEY")
 llm = ChatGroq(
-    model="llama-3.3-70b-versatile", 
+    model="llama-3.1-8b-instant",  # Fastest and most efficient supported Groq model
     api_key=groq_api_key, 
     temperature=0
 )
@@ -23,14 +23,14 @@ llm = ChatGroq(
 @tool
 def log_interaction(
     hcp_name: str, 
-    interaction_type: str = None, 
-    date: str = None, 
-    time: str = None, 
-    attendees: str = None, 
-    topics_discussed: str = None, 
-    outcomes: str = None, 
-    follow_up_actions: str = None, 
-    materials: List[str] = None
+    interaction_type: Optional[str] = None, 
+    date: Optional[str] = None, 
+    time: Optional[str] = None, 
+    attendees: Optional[str] = None, 
+    topics_discussed: Optional[str] = None, 
+    outcomes: Optional[str] = None, 
+    follow_up_actions: Optional[str] = None, 
+    materials: Optional[List[str]] = None
 ) -> str:
     """
     Log a new interaction with an HCP. Call this when the user describes a new meeting or interaction.
@@ -41,10 +41,10 @@ def log_interaction(
 
 @tool
 def edit_interaction(
-    topics_discussed: str = None, 
-    outcomes: str = None, 
-    follow_up_actions: str = None, 
-    materials: List[str] = None
+    topics_discussed: Optional[str] = None, 
+    outcomes: Optional[str] = None, 
+    follow_up_actions: Optional[str] = None, 
+    materials: Optional[List[str]] = None
 ) -> str:
     """
     Edit the currently drafted interaction. Call this when the user adds more context to the current draft

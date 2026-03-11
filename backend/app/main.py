@@ -29,15 +29,6 @@ def read_root():
 def get_hcps(db: Session = Depends(get_db)):
     return db.query(models.HCP).all()
 
-@app.post("/interactions", response_model=schemas.InteractionOut)
-def create_interaction(data: schemas.InteractionCreate, db: Session = Depends(get_db)):
-    hcp = db.query(models.HCP).filter(models.HCP.name == data.hcp_name).first()
-    if not hcp:
-        hcp = models.HCP(name=data.hcp_name)
-        db.add(hcp)
-        db.commit()
-        db.refresh(hcp)
-    
     interaction = models.Interaction(
         hcp_id=hcp.id,
         interaction_type=data.interaction_type,

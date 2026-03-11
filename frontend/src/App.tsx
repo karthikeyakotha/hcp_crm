@@ -4,6 +4,7 @@ import type { RootState, AppDispatch } from './store';
 import { updateField } from './store/formSlice';
 import { sendMessageToAgent } from './store/chatSlice';
 import { FaMicrophone, FaPaperPlane } from 'react-icons/fa';
+import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -121,7 +122,33 @@ function App() {
                 placeholder="Enter next steps or tasks..."
               ></textarea>
             </div>
-
+            {/* Submit Button */}
+            <div className="mt-8 flex justify-end">
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await axios.post('http://localhost:8000/interactions', {
+                      hcp_name: form.hcp_name,
+                      interaction_type: form.interaction_type,
+                      date: form.date,
+                      time: form.time,
+                      attendees: form.attendees,
+                      topics_discussed: form.topics_discussed,
+                      outcomes: form.outcomes,
+                      follow_up_actions: form.follow_up_actions
+                    });
+                    alert("Interaction Logged to Database Successfully!");
+                  } catch (err) {
+                    alert("Error saving interaction!");
+                    console.error(err);
+                  }
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded shadow"
+              >
+                Save Interaction permanently
+              </button>
+            </div>
           </div>
         </div>
       </div>
